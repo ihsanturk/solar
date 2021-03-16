@@ -1,18 +1,19 @@
 """solar - Solar system generative art
 
 Usage:
-  solar [ -w <width> -v <height> -o -l -s <sunsize> -b <bordersize> -n <noise> ]
+  solar [ options ]
   solar (-h | --help)
   solar --version
 
 Options:
   -w --width <width>             Width of the image [default: 3000].
   -v --height <height>           Height of the image [default: 2000].
-  -o --orbit                     Orbit flag.
-  -l --line                      Line flag.
+  -o --orbit                     Use orbits.
+  -l --line                      Use linear lines.
   -s --sun-size <sunsize>        Set Sun size.
   -b --border-size <bordersize>  Border thickness [default: 5].
   -n --noise <noise>             Grain.
+  -p --preset <preset>           "13inch-retina", "iphone-se", "iphone-x", ...
   -h --help                      Show this screen.
   --version                      Show the version.
 
@@ -75,12 +76,27 @@ def draw_background(cr, r, g, b, width, height):
 def main():
     arg = docopt(__doc__, version=version)
 
+    resolution_presets = {
+        "15inch-retina": (3072, 1920),
+        "13inch-retina": (2560, 1600),
+        "iphone-5s":     (750,  1334),
+        "iphone-se":     (750,  1334),
+    }
+
     width       = int(arg['--width'])
     height      = int(arg['--height'])
     border_size = float(arg['--border-size'])
     sun_size    = width/10 if not arg['--sun-size'] else float(arg['--sun-size'])
     sun_center  = height - border_size
-    arg_noise   = width/10000 if not arg['--noise'] else float(arg['--noise'])
+    arg_noise = max(width,height)/10000 if not arg['--noise'] else float(arg['--noise'])
+
+    if arg['--preset'] is not None:
+        if arg['--preset'] in resolution_presets:
+            width, height = arg['--preset']
+        else:
+            print('available presets are:')
+            for p in resolution_presets:
+                print(f'\t{p}')
 
     ims = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
     cr = cairo.Context(ims)
