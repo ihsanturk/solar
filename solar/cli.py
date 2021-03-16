@@ -1,7 +1,7 @@
 """solar - Solar system generative art
 
 Usage:
-  solar [ options ]
+  solar [ options ] <outputfile>
   solar (-h | --help)
   solar --version
 
@@ -157,17 +157,18 @@ def main():
             min_size += 5
             max_size += 5 * x
 
-    ims.write_to_png('solar.png')
+    filename=arg['<outputfile>'] if arg['<outputfile>'] else 'solar.png'
+    ims.write_to_png(filename)
 
     # noise
-    pil_image = Image.open('solar.png')
+    pil_image = Image.open(filename)
     pixels = pil_image.load()
     for i in range(pil_image.size[0]):
         for j in range(pil_image.size[1]):
             r, g, b = pixels[i, j]
             noise = float_gen(1.0 - arg_noise, 1.0 + arg_noise)
             pixels[i, j] = (int(r * noise), int(g * noise), int(b * noise))
-    pil_image.save('solar-noise.png')
+    pil_image.save(f'noised-{filename}')
 
 if __name__ == '__main__':
     main()
