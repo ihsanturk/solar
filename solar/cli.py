@@ -10,7 +10,7 @@ Options:
   -v --height <height>           Height of the image [default: 2000].
   -o --orbit                     Orbit flag.
   -l --line                      Line flag.
-  -s --sun-size <sunsize>        Set Sun size [default: 300].
+  -s --sun-size <sunsize>        Set Sun size.
   -b --border-size <bordersize>  Border thickness [default: 7].
   -n --noise <noise>             Grain [default: 0.3].
   -h --help                      Show this screen.
@@ -78,7 +78,7 @@ def main():
     width       = int(arg['--width'])
     height      = int(arg['--height'])
     border_size = float(arg['--border-size'])
-    sun_size    = float(arg['--sun-size'])
+    sun_size    = width/10 if not arg['--sun-size'] else float(arg['--sun-size'])
     sun_center  = height - border_size
     arg_noise   = float(arg['--noise'])
 
