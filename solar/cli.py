@@ -22,7 +22,6 @@ from PIL import Image, ImageDraw
 from docopt import docopt
 import PIL
 import cairo
-import docopt
 import math
 import random
 
@@ -74,7 +73,7 @@ def draw_background(cr, r, g, b, width, height):
 
 
 def main():
-    arg = docopt.docopt(__doc__, version=version)
+    arg = docopt(__doc__, version=version)
 
     width       = int(arg['--width'])
     height      = int(arg['--height'])
