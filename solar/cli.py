@@ -26,6 +26,7 @@ import PIL
 import cairo
 import math
 import random
+import sys
 
 colors = [
     ( 29,  32,  33), ( 40,  40,  40), ( 50,  48,  47), ( 60,  56,  54),
@@ -92,21 +93,27 @@ def main():
     width       = int(arg['--width'])
     height      = int(arg['--height'])
     border_size = float(arg['--border-size'])
-    sun_size    = max(width, height)/10 if not arg['--sun-size'] else float(arg['--sun-size'])
+    sun_size = max(width, height)/10 if not arg['--sun-size'] else float(arg['--sun-size'])
     sun_center  = height - border_size
     arg_noise = max(width,height)/10000 if not arg['--noise'] else float(arg['--noise'])
 
     if arg['--preset'] is not None:
         if arg['--preset'] in presets:
+            p = arg['--preset']
+            print(f'using resolution: {p} ({presets[p][0]}x{presets[p][1]})...',
+                  file=sys.stderr)
             width, height = presets[arg['--preset']]
         else:
-            print('available presets are:')
+            print(f'preset: "{arg["--preset"]}" is not valid, please select:\n')
             for p in presets:
-                print(f'\t{p}')
+                print(f'\t- {p}')
+            sys.exit(1)
 
+    print('creating the image...', file=sys.stderr)
     ims = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
     cr = cairo.Context(ims)
 
+    print('selecting random colors from the list...', file=sys.stderr)
     sun_color = random.choice(colors)
     sun_r = sun_color[0]/255.0
     sun_g = sun_color[1]/255.0
@@ -116,6 +123,7 @@ def main():
     draw_border(cr, border_size, sun_r, sun_g, sun_b, width, height,
                 use_gaps=arg['--gaps'])
 
+    print('creating planets...', file=sys.stderr)
     draw_circle_fill(cr, width/2, sun_center, sun_size, sun_r, sun_g, sun_b)
 
     distance_between_planets = 20
@@ -158,9 +166,11 @@ def main():
             max_size += 5 * x
 
     filename=arg['<outputfile>'] if arg['<outputfile>'] else 'solar.png'
+    print(f'writing to file: {filename}...', file=sys.stderr)
     ims.write_to_png(filename)
 
     # noise
+    print(f'adding noise: {arg["--noise"]}...', file=sys.stderr)
     pil_image = Image.open(filename)
     pixels = pil_image.load()
     for i in range(pil_image.size[0]):
@@ -168,7 +178,9 @@ def main():
             r, g, b = pixels[i, j]
             noise = float_gen(1.0 - arg_noise, 1.0 + arg_noise)
             pixels[i, j] = (int(r * noise), int(g * noise), int(b * noise))
+    print(f'writing to file: noised-{filename}...', file=sys.stderr)
     pil_image.save(f'noised-{filename}')
+    print(f'ready: noised-{filename}', file=sys.stderr)
 
 if __name__ == '__main__':
     main()
