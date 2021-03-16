@@ -1,7 +1,7 @@
 """solar - Solar system generative art
 
 Usage:
-  solar [ options ] <outputfile>
+  solar [ options ] [ <outputfile> ]
   solar (-h | --help)
   solar --version
 
