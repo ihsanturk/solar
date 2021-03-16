@@ -47,17 +47,17 @@ version = '1.0'
 float_gen = lambda a, b: random.uniform(a, b)
 
 
-def draw_border(cr, size, r, g, b, width, height, use_gaps=False):
-    # TODO: make gaps size adjustable
+def draw_border(cr, thickness, r, g, b, width, height, use_gaps=False):
+    # TODO: make gaps thickness adjustable
     if use_gaps:
-        gaps = max(width, height) * 0.01
+        gaps = max(width, height) * 0.02
     else:
         gaps = 0
     cr.set_source_rgb(r, g, b)
-    cr.rectangle(gaps, gaps, size, height - gaps)
-    cr.rectangle(gaps, gaps, width - gaps, size + gaps)
-    cr.rectangle(gaps, (height - gaps - size), width - gaps, size)
-    cr.rectangle(width-size, 0, size, height)
+    cr.rectangle(gaps, gaps, thickness, height - gaps*2)
+    cr.rectangle(gaps, gaps, width - gaps*2, thickness)
+    cr.rectangle(gaps, (height - gaps - thickness), width - gaps*2, thickness)
+    cr.rectangle(width-thickness-gaps, gaps, thickness, height-gaps*2)
     cr.fill()
 
 
