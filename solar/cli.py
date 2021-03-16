@@ -6,13 +6,13 @@ Usage:
   solar --version
 
 Options:
-  -w --width        Width of the image. Default: 3000
-  -v --height       Height of the image. Default: 2000
-  -s --sun-size     Set Sun size. Default: 300
-  -b --border-size  Border thickness. Default: 50
-  -n --noise        Grain. Default: 4
-  -h --help         Show this screen.
-  --version         Show the version.
+  -w --width <width>             Width of the image [default: 3000].
+  -v --height <height>           Height of the image [default: 2000].
+  -s --sun-size <sunsize>        Set Sun size [default: 300].
+  -b --border-size <bordersize>  Border thickness [default: 50].
+  -n --noise <noise>             Grain [default: 4].
+  -h --help                      Show this screen.
+  --version                      Show the version.
 
 """
 
@@ -50,10 +50,12 @@ def draw_background(cr, r, g, b, width, height):
 def main():
     arg = docopt.docopt(__doc__, version=version)
 
-    width       = arg['<width>']
-    height      = arg['<height>']
-    border_size = arg['<bordersize>']
-    sun_size    = arg['<sunsize>']
+    print(arg)
+
+    width       = arg['--width']
+    height      = arg['--height']
+    border_size = arg['--bordersize']
+    sun_size    = arg['--sunsize']
     sun_center  = height - border_size
 
     ims = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
