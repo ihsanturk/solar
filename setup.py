@@ -6,7 +6,7 @@ setup(
     packages = ['solar'],
     entry_points={
         'console_scripts': [
-            'main = solar.cli:main',
+            'solar = solar.cli:main',
         ],
     }
 )

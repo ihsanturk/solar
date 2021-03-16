@@ -10,7 +10,7 @@
 		pkgs = nixpkgs.legacyPackages.${system};
 	in rec {
 
-		solar = {lib, buildPythonApplication, docopt, cairo, pillow}:
+		solar = {lib, buildPythonApplication, docopt, pycairo, pillow}:
 			buildPythonApplication rec {
 				pname = "solar";
 				version = "1.0";
@@ -18,7 +18,7 @@
 				doCheck = false;
 				propagatedBuildInputs = [
 					docopt
-					cairo
+					pycairo
 					pillow
 				];
 			};
