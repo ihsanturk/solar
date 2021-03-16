@@ -77,10 +77,10 @@ def main():
 
     width       = int(arg['--width'])
     height      = int(arg['--height'])
-    border_size = int(arg['--border-size'])
-    sun_size    = int(arg['--sun-size'])
+    border_size = float(arg['--border-size'])
+    sun_size    = float(arg['--sun-size'])
     sun_center  = height - border_size
-    arg_noise   = int(arg['--noise'])
+    arg_noise   = float(arg['--noise'])
 
     ims = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
     cr = cairo.Context(ims)
