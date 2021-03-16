@@ -81,6 +81,7 @@ def main():
     border_size = int(arg['--border-size'])
     sun_size    = int(arg['--sun-size'])
     sun_center  = height - border_size
+    arg_noise   = int(arg['--noise'])
 
     ims = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
     cr = cairo.Context(ims)
@@ -141,7 +142,7 @@ def main():
     for i in range(pil_image.size[0]):
         for j in range(pil_image.size[1]):
             r, g, b = pixels[i, j]
-            noise = float_gen(1.0 - arg['--noise'], 1.0 + arg['--noise'])
+            noise = float_gen(1.0 - arg_noise, 1.0 + arg_noise)
             pixels[i, j] = (int(r * noise), int(g * noise), int(b * noise))
     pil_image.save('solar-noise.png')
 
