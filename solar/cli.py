@@ -52,10 +52,10 @@ def main():
 
     print(arg)
 
-    width       = arg['--width']
-    height      = arg['--height']
-    border_size = arg['--border-size']
-    sun_size    = arg['--sun-size']
+    width       = int(arg['--width'])
+    height      = int(arg['--height'])
+    border_size = int(arg['--border-size'])
+    sun_size    = int(arg['--sun-size'])
     sun_center  = height - border_size
 
     ims = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
@@ -64,6 +64,7 @@ def main():
     draw_background(cr, .3, .3, .3, width, height)
 
     sun_color = random.choice(list_of_colors)
+    sun_r, sun_g, sun_b = sun_color[0]
 
 
 if __name__ == '__main__':
