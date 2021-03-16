@@ -12,9 +12,7 @@ nix run github:ihsanturk/solar -- solar.png --orbit --gaps
 ```
 And open the `./noised-solar.png`
 
----
-
-- TODO: add example images
+![example image created with solar](https://i.imgur.com/lBambwF.png)
 
 ### notes
 
