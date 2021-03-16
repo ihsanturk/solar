@@ -2,12 +2,11 @@ from setuptools import setup
 
 setup(
     name='solar',
-    version="2.0.1-alpha",
-    py_modules=['main'],
-    packages = ['main'],
+    py_modules=['solar'],
+    packages = ['solar'],
     entry_points={
         'console_scripts': [
-            'main = main:main',
+            'main = solar.cli:main',
         ],
     }
 )
