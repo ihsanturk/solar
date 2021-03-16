@@ -107,12 +107,14 @@ def main():
     ims = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
     cr = cairo.Context(ims)
 
-    draw_background(cr, .2, .2, .2, width, height)
-
     sun_color = random.choice(colors)
     sun_r = sun_color[0]/255.0
     sun_g = sun_color[1]/255.0
     sun_b = sun_color[2]/255.0
+
+    draw_background(cr, .2, .2, .2, width, height)
+    draw_border(cr, border_size, sun_r, sun_g, sun_b, width, height,
+                use_gaps=arg['--gaps'])
 
     draw_circle_fill(cr, width/2, sun_center, sun_size, sun_r, sun_g, sun_b)
 
@@ -154,9 +156,6 @@ def main():
 
             min_size += 5
             max_size += 5 * x
-
-    draw_border(cr, border_size, sun_r, sun_g, sun_b, width, height,
-                use_gaps=arg['--gaps'])
 
     ims.write_to_png('solar.png')
 
