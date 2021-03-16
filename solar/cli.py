@@ -16,6 +16,14 @@ Options:
 
 """
 
+from PIL import Image, ImageDraw
+from docopt import docopt
+import PIL
+import cairo
+import docopt
+import math
+import random
+
 list_of_colors = [
     ( 29,  32,  33), ( 40,  40,  40), ( 50,  48,  47), ( 60,  56,  54),
     ( 80,  73,  69), (102,  92,  84), (124, 111, 100), (146, 131, 116),
@@ -30,14 +38,6 @@ list_of_colors = [
 ]
 
 
-from docopt import docopt
-import cairo
-import PIL
-import docopt
-import math
-import random
-from PIL import Image, ImageDraw
-
 version = '1.0'
 
 
@@ -48,11 +48,11 @@ def draw_background(cr, r, g, b, width, height):
 
 
 def main():
-    arg = docopt(__doc__, version=version)
+    arg = docopt.docopt(__doc__, version=version)
 
     width       = arg['<width>']
     height      = arg['<height>']
-    border_size = arg['<border>']
+    border_size = arg['<bordersize>']
     sun_size    = arg['<sunsize>']
     sun_center  = height - border_size
 
