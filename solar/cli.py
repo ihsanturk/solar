@@ -156,7 +156,7 @@ def main():
             max_size += 5 * x
 
     draw_border(cr, border_size, sun_r, sun_g, sun_b, width, height,
-                use_gaps=presets[arg['--gaps']])
+                use_gaps=arg['--gaps'])
 
     ims.write_to_png('solar.png')
 
