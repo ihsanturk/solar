@@ -82,7 +82,7 @@ def draw_background(cr, r, g, b, width, height):
 def main():
     arg = docopt(__doc__, version=version)
 
-    resolution_presets = {
+    presets = {
         "15inch-retina": (3072, 1920),
         "13inch-retina": (2560, 1600),
         "iphone-5s":     (750,  1334),
@@ -97,11 +97,11 @@ def main():
     arg_noise = max(width,height)/10000 if not arg['--noise'] else float(arg['--noise'])
 
     if arg['--preset'] is not None:
-        if arg['--preset'] in resolution_presets:
-            width, height = arg['--preset']
+        if arg['--preset'] in presets:
+            width, height = presets[arg['--preset']]
         else:
             print('available presets are:')
-            for p in resolution_presets:
+            for p in presets:
                 print(f'\t{p}')
 
     ims = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
@@ -156,7 +156,7 @@ def main():
             max_size += 5 * x
 
     draw_border(cr, border_size, sun_r, sun_g, sun_b, width, height,
-                use_gaps=arg['--gaps'])
+                use_gaps=presets[arg['--gaps']])
 
     ims.write_to_png('solar.png')
 
