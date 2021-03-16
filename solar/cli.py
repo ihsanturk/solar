@@ -114,7 +114,7 @@ def main():
                 cr.line_to(width-(border_size*2), next_center)
                 cr.stroke()
 
-            draw_circle_fill(cr, width/2, next_center, next_size*1.3, .3, .3, .3)
+            draw_circle_fill(cr, width/2, next_center, next_size*1.3, .2, .2, .2)
 
             random_color = random.choice(list_of_colors)
             while(random_color is last_color):
