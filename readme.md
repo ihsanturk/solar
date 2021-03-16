@@ -10,6 +10,8 @@ to get a random solar system image is:
 ```
 nix run github:ihsanturk/solar output.png
 ```
+> If you don't know what [`nix`](https://nixos.org) is, you probably missing
+> out a great software.
 
 - TODO: add example images
 
