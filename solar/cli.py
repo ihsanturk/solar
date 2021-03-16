@@ -54,8 +54,8 @@ def main():
 
     width       = arg['--width']
     height      = arg['--height']
-    border_size = arg['--bordersize']
-    sun_size    = arg['--sunsize']
+    border_size = arg['--border-size']
+    sun_size    = arg['--sun-size']
     sun_center  = height - border_size
 
     ims = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
