@@ -6,10 +6,11 @@ Usage:
   solar --version
 
 Options:
-  -w --width <width>             Width of the image [default: 3000].
-  -v --height <height>           Height of the image [default: 2000].
+  -w --width <width>             Width of the image [default: 2560].
+  -v --height <height>           Height of the image [default: 1600].
   -o --orbit                     Use orbits.
   -l --line                      Use linear lines.
+  -g --gaps                      Use gaps.
   -s --sun-size <sunsize>        Set Sun size.
   -b --border-size <bordersize>  Border thickness [default: 5].
   -n --noise <noise>             Grain.
@@ -26,7 +27,7 @@ import cairo
 import math
 import random
 
-list_of_colors = [
+colors = [
     ( 29,  32,  33), ( 40,  40,  40), ( 50,  48,  47), ( 60,  56,  54),
     ( 80,  73,  69), (102,  92,  84), (124, 111, 100), (146, 131, 116),
     (146, 131, 116), (249, 245, 215), (251, 241, 199), (242, 229, 188),
@@ -46,11 +47,16 @@ version = '1.0'
 float_gen = lambda a, b: random.uniform(a, b)
 
 
-def draw_border(cr, size, r, g, b, width, height):
+def draw_border(cr, size, r, g, b, width, height, use_gaps=False):
+    # TODO: make gaps size adjustable
+    if use_gaps:
+        gaps = max(width, height) * 0.01
+    else:
+        gaps = 0
     cr.set_source_rgb(r, g, b)
-    cr.rectangle(0, 0, size, height)
-    cr.rectangle(0, 0, width, size)
-    cr.rectangle(0, height-size, width, size)
+    cr.rectangle(gaps, gaps, size, height - gaps)
+    cr.rectangle(gaps, gaps, width - gaps, size + gaps)
+    cr.rectangle(gaps, (height - gaps - size), width - gaps, size)
     cr.rectangle(width-size, 0, size, height)
     cr.fill()
 
@@ -86,7 +92,7 @@ def main():
     width       = int(arg['--width'])
     height      = int(arg['--height'])
     border_size = float(arg['--border-size'])
-    sun_size    = width/10 if not arg['--sun-size'] else float(arg['--sun-size'])
+    sun_size    = max(width, height)/10 if not arg['--sun-size'] else float(arg['--sun-size'])
     sun_center  = height - border_size
     arg_noise = max(width,height)/10000 if not arg['--noise'] else float(arg['--noise'])
 
@@ -103,8 +109,10 @@ def main():
 
     draw_background(cr, .2, .2, .2, width, height)
 
-    sun_color = random.choice(list_of_colors)
-    sun_r,sun_g,sun_b = sun_color[0]/255.0,sun_color[1]/255.0,sun_color[2]/255.0
+    sun_color = random.choice(colors)
+    sun_r = sun_color[0]/255.0
+    sun_g = sun_color[1]/255.0
+    sun_b = sun_color[2]/255.0
 
     draw_circle_fill(cr, width/2, sun_center, sun_size, sun_r, sun_g, sun_b)
 
@@ -132,9 +140,9 @@ def main():
 
             draw_circle_fill(cr, width/2, next_center, next_size*1.3, .2, .2, .2)
 
-            random_color = random.choice(list_of_colors)
+            random_color = random.choice(colors)
             while(random_color is last_color):
-                random_color = random.choice(list_of_colors)
+                random_color = random.choice(colors)
 
             last_color = random_color
 
@@ -147,7 +155,8 @@ def main():
             min_size += 5
             max_size += 5 * x
 
-    draw_border(cr, border_size, sun_r, sun_g, sun_b, width, height)
+    draw_border(cr, border_size, sun_r, sun_g, sun_b, width, height,
+                use_gaps=arg['--gaps'])
 
     ims.write_to_png('solar.png')
 
