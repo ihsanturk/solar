@@ -41,6 +41,12 @@ list_of_colors = [
 version = '1.0'
 
 
+def draw_circle_fill(cr, x, y, radius, r, g, b):
+    cr.set_source_rgb(r, g, b)
+    cr.arc(x, y, radius, 0, 2*math.pi)
+    cr.fill()
+
+
 def draw_background(cr, r, g, b, width, height):
     cr.set_source_rgb(r, g, b)
     cr.rectangle(0, 0, width, height)
@@ -64,7 +70,9 @@ def main():
     draw_background(cr, .3, .3, .3, width, height)
 
     sun_color = random.choice(list_of_colors)
-    sun_r, sun_g, sun_b = sun_color[0]
+    sun_r,sun_g,sun_b = sun_color[0]/255.0,sun_color[1]/255.0,sun_color[2]/255.0
+
+    draw_circle_fill(cr, width/2, sun_center, sun_size, sun_r, sun_g, sun_b)
 
 
 if __name__ == '__main__':
