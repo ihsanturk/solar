@@ -11,8 +11,8 @@ Options:
   -o --orbit                     Orbit flag.
   -l --line                      Line flag.
   -s --sun-size <sunsize>        Set Sun size [default: 300].
-  -b --border-size <bordersize>  Border thickness [default: 50].
-  -n --noise <noise>             Grain [default: 4].
+  -b --border-size <bordersize>  Border thickness [default: 20].
+  -n --noise <noise>             Grain [default: 0.3].
   -h --help                      Show this screen.
   --version                      Show the version.
 
@@ -85,7 +85,7 @@ def main():
     ims = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
     cr = cairo.Context(ims)
 
-    draw_background(cr, .3, .3, .3, width, height)
+    draw_background(cr, .2, .2, .2, width, height)
 
     sun_color = random.choice(list_of_colors)
     sun_r,sun_g,sun_b = sun_color[0]/255.0,sun_color[1]/255.0,sun_color[2]/255.0
