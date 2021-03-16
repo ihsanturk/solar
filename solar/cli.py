@@ -11,7 +11,7 @@ Options:
   -o --orbit                     Orbit flag.
   -l --line                      Line flag.
   -s --sun-size <sunsize>        Set Sun size [default: 300].
-  -b --border-size <bordersize>  Border thickness [default: 20].
+  -b --border-size <bordersize>  Border thickness [default: 7].
   -n --noise <noise>             Grain [default: 0.3].
   -h --help                      Show this screen.
   --version                      Show the version.
