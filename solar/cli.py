@@ -1,13 +1,15 @@
 """solar - Solar system generative art
 
 Usage:
-  solar [ -w <width>  -s <sunsize> -v <height> -b <bordersize> -n <noise> ]
+  solar [ -w <width> -v <height> -o -l -s <sunsize> -b <bordersize> -n <noise> ]
   solar (-h | --help)
   solar --version
 
 Options:
   -w --width <width>             Width of the image [default: 3000].
   -v --height <height>           Height of the image [default: 2000].
+  -o --orbit                     Orbit flag.
+  -l --line                      Line flag.
   -s --sun-size <sunsize>        Set Sun size [default: 300].
   -b --border-size <bordersize>  Border thickness [default: 50].
   -n --noise <noise>             Grain [default: 4].
@@ -41,6 +43,24 @@ list_of_colors = [
 version = '1.0'
 
 
+float_gen = lambda a, b: random.uniform(a, b)
+
+
+def draw_border(cr, size, r, g, b, width, height):
+    cr.set_source_rgb(r, g, b)
+    cr.rectangle(0, 0, size, height)
+    cr.rectangle(0, 0, width, size)
+    cr.rectangle(0, height-size, width, size)
+    cr.rectangle(width-size, 0, size, height)
+    cr.fill()
+
+
+def draw_orbit(cr, line, x, y, radius, r, g, b):
+    cr.set_line_width(line)
+    cr.arc(x, y, radius, 0, 2*math.pi)
+    cr.stroke()
+
+
 def draw_circle_fill(cr, x, y, radius, r, g, b):
     cr.set_source_rgb(r, g, b)
     cr.arc(x, y, radius, 0, 2*math.pi)
@@ -55,8 +75,6 @@ def draw_background(cr, r, g, b, width, height):
 
 def main():
     arg = docopt.docopt(__doc__, version=version)
-
-    print(arg)
 
     width       = int(arg['--width'])
     height      = int(arg['--height'])
@@ -74,6 +92,58 @@ def main():
 
     draw_circle_fill(cr, width/2, sun_center, sun_size, sun_r, sun_g, sun_b)
 
+    distance_between_planets = 20
+    last_center = sun_center
+    last_size = sun_size
+    last_color = sun_color
+
+    min_size = 5
+    max_size = 70
+
+    for x in range(1, 20):
+        next_size = random.randint(min_size, max_size)
+        next_center = last_center - last_size - (next_size * 2) - distance_between_planets
+
+        if not(next_center - next_size < border_size):
+            if arg['--orbit']:
+                draw_orbit(cr, 4, width/2, sun_center,
+                        height - next_center - border_size,
+                        .6, .6, .6)
+            elif(arg['--line']):
+                cr.move_to(border_size * 2, next_center)
+                cr.line_to(width-(border_size*2), next_center)
+                cr.stroke()
+
+            draw_circle_fill(cr, width/2, next_center, next_size*1.3, .3, .3, .3)
+
+            random_color = random.choice(list_of_colors)
+            while(random_color is last_color):
+                random_color = random.choice(list_of_colors)
+
+            last_color = random_color
+
+            r, g, b = random_color[0]/255.0, random_color[1]/255.0, random_color[2]/255.0
+            draw_circle_fill(cr, width/2, next_center, next_size, r, g, b)
+
+            last_center = next_center
+            last_size = next_size
+
+            min_size += 5
+            max_size += 5 * x
+
+    draw_border(cr, border_size, sun_r, sun_g, sun_b, width, height)
+
+    ims.write_to_png('solar.png')
+
+    # noise
+    pil_image = Image.open('solar.png')
+    pixels = pil_image.load()
+    for i in range(pil_image.size[0]):
+        for j in range(pil_image.size[1]):
+            r, g, b = pixels[i, j]
+            noise = float_gen(1.0 - arg['--noise'], 1.0 + arg['--noise'])
+            pixels[i, j] = (int(r * noise), int(g * noise), int(b * noise))
+    pil_image.save('solar-noise.png')
 
 if __name__ == '__main__':
     main()
